@@ -16,7 +16,6 @@ function App() {
         <a href="https://react.dev" target="_blank">
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
-        <Icon variant="fullscreen" className="custom-class" />
       </div>
       <h1>Vite + React</h1>
       <div className="card">
@@ -30,6 +29,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <Icon variant="play" className="custom-class" />
     </>
   );
 }
