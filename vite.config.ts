@@ -6,8 +6,29 @@ export default defineConfig({
   plugins: [
     react(),
     VitePluginFonts({
-      google: {
-        families: ["Roboto:400"],
+      custom: {
+        families: [
+          {
+            name: "icomoon",
+
+            local: "icomoon",
+
+            src: "./fonts/icomoon.ttf",
+          },
+          {
+            name: "Roboto",
+            local: "Roboto",
+            src: "./fonts/Roboto-Regular.ttf",
+          },
+        ],
+
+        display: "auto",
+
+        preload: true,
+
+        prefetch: false,
+
+        injectTo: "head-prepend",
       },
     }),
   ],
