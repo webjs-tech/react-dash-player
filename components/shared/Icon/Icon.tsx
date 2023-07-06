@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 
-import style from "./Icon.module.scss";
+import styles from "./Icon.module.scss";
 
 type VariantType =
   | "information"
@@ -23,7 +23,7 @@ type Props = {
 const Icon: React.FC<Props> = ({ variant, className }) => {
   return (
     <i
-      className={classNames(style.icon, style[`icon-${variant}`], className)}
+      className={classNames(styles.icon, styles[`icon-${variant}`], className)}
       aria-hidden={true}
     ></i>
   );

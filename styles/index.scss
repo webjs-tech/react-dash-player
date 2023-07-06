@@ -1,10 +1,4 @@
-@font-face {
-  font-family: 'Roboto';
-  src: url('fonts/Roboto-Regular.ttf');
-  font-weight: 400;
-  font-style: normal;
-  font-display: block;
-}
+@import "fonts";
 
 :root {
   font-family: Roboto, system-ui, Avenir, Helvetica, Arial, sans-serif;
