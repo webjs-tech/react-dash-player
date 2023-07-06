@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 
-import style from "./Icon.module.scss";
+import styles from "./Icon.module.scss";
 
 type VariantType =
   | "information"
