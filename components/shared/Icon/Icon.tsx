@@ -21,9 +21,8 @@ type Props = {
 };
 
 const Icon: React.FC<Props> = ({ variant, className }) => {
-  const iconClass = `icon-${variant}`;
   return (
-    <i className={classNames(iconClass, className)} aria-hidden={true}></i>
+    <i className={classNames(`icon-${variant}`, className)} aria-hidden={true}></i>
   );
 };
 
