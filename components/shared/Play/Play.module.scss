@@ -1,0 +1,12 @@
+button {
+  border:none;
+  border-radius: 0;
+
+  &:focus {
+    outline: none;
+    
+  }
+}
+button:hover {
+  color: #646cff;
+}
