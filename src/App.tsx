@@ -2,10 +2,13 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import Icon from "../components/shared/Icon/Icon.tsx";
+import PlayButton from "../components/PlayButton/PlayButton";
 
 function App() {
   const [count, setCount] = useState(0);
+  const handlePlayClick = () => {
+    console.log("pause/play");
+  };
 
   return (
     <>
@@ -29,7 +32,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-      <Icon variant="radio" />
+      <PlayButton onClick={handlePlayClick} className="custom-class" />
     </>
   );
 }
