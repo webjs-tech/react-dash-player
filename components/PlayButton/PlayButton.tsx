@@ -2,20 +2,22 @@ import React, { useState, ButtonHTMLAttributes } from "react";
 import Icon from "../Icon/Icon";
 import "./PlayButton.module.scss";
 
-type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
-  onClick: () => void;
-};
+type Props = ButtonHTMLAttributes<HTMLButtonElement>;
 
-const PlayButton: React.FC<Props> = ({ onClick, ...buttonProps }) => {
+const PlayButton: React.FC<Props> = ({ onClick, ...rest }) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const handleTogglePlay = () => {
+  const handleTogglePlay = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     setIsPlaying((prevIsPlaying) => !prevIsPlaying);
-    onClick();
+    if (onClick) {
+      onClick(event);
+    }
   };
 
   return (
-    <button onClick={handleTogglePlay} {...buttonProps}>
+    <button onClick={handleTogglePlay} {...rest}>
       <Icon variant={isPlaying ? "play" : "pause"} />
     </button>
   );
