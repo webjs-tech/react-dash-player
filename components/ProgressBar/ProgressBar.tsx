@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import Icon from "../Icon/Icon";
 import "./ProgressBar.scss";
 
@@ -13,18 +13,6 @@ const ProgressBar: React.FC<Props> = ({ value, onChange }) => {
   const [dragStartValue, setDragStartValue] = useState(value);
   const progressBarRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleMouseUp = () => {
-      setIsDragging(false);
-    };
-
-    window.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, []);
-
   const handleIconMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
     setIsDragging(true);
@@ -32,16 +20,21 @@ const ProgressBar: React.FC<Props> = ({ value, onChange }) => {
     setDragStartValue(value);
   };
 
+  const calculatePinPosition = (event: React.MouseEvent<HTMLDivElement>) => {
+    const progressBarRect = progressBarRef.current?.getBoundingClientRect();
+    const progressBarWidth = progressBarRect?.width || 0;
+    const offsetX = event.clientX - (progressBarRect?.left || 0);
+    const progressPercentage = offsetX / progressBarWidth;
+
+    const clampedPercentage = Math.max(0, Math.min(1, progressPercentage));
+    const newValue = Math.round(clampedPercentage * 100);
+
+    return newValue;
+  };
+
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (isDragging && progressBarRef.current) {
-      const progressBarRect = progressBarRef.current.getBoundingClientRect();
-      const progressBarWidth = progressBarRect.width;
-      const offsetX = event.clientX - progressBarRect.left;
-      const progressPercentage = offsetX / progressBarWidth;
-
-      const clampedPercentage = Math.max(0, Math.min(1, progressPercentage));
-      const newValue = Math.round(clampedPercentage * 100);
-
+      const newValue = calculatePinPosition(event);
       onChange(newValue);
     }
   };
