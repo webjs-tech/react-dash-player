@@ -12,7 +12,7 @@ const ProgressBar: React.FC<Props> = ({ value, onChange }) => {
   const [dragStartX, setDragStartX] = useState(0);
   const [dragStartValue, setDragStartValue] = useState(value);
   const progressBarRef = useRef<HTMLDivElement>(null);
-  const iconRef = useRef<HTMLDivElement>(null);
+  // const iconRef = useRef<HTMLDivElement>(null);
 
   const handleIconMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
@@ -41,10 +41,8 @@ const ProgressBar: React.FC<Props> = ({ value, onChange }) => {
   };
 
   const handleProgressBarClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (iconRef.current !== event.target) {
-      const newValue = calculatePinPosition(event);
-      onChange(newValue);
-    }
+    const newValue = calculatePinPosition(event);
+    onChange(newValue);
   };
 
   return (
