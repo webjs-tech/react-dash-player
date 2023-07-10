@@ -22,12 +22,10 @@ const ProgressBar: React.FC<Props> = ({ value, onChange }) => {
 
   const calculatePinPosition = (event: React.MouseEvent<HTMLDivElement>) => {
     const progressBarRect = progressBarRef.current?.getBoundingClientRect();
-    if (!progressBarRect) {
-      return 0;
-    }
-    const { left, width } = progressBarRect;
-    const offsetX = event.clientX - left;
-    const progressPercentage = offsetX / width;
+    const progressBarWidth = progressBarRect?.width || 0;
+    const offsetX = event.clientX - (progressBarRect?.left || 0);
+    const progressPercentage = offsetX / progressBarWidth;
+
     const clampedPercentage = Math.max(0, Math.min(1, progressPercentage));
     const newValue = Math.round(clampedPercentage * 100);
 
@@ -35,12 +33,10 @@ const ProgressBar: React.FC<Props> = ({ value, onChange }) => {
   };
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!isDragging || !progressBarRef.current) {
-      return;
+    if (isDragging && progressBarRef.current) {
+      const newValue = calculatePinPosition(event);
+      onChange(newValue);
     }
-
-    const newValue = calculatePinPosition(event);
-    onChange(newValue);
   };
 
   const handleMouseUp = () => {
