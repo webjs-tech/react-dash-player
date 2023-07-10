@@ -33,10 +33,13 @@ const ProgressBar: React.FC<Props> = ({ value, onChange }) => {
   };
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (isDragging && progressBarRef.current) {
-      const newValue = calculatePinPosition(event);
-      onChange(newValue);
+    if (!isDragging || !progressBarRef.current) {
+      return;
     }
+    
+    const newValue = calculatePinPosition(event);
+    onChange(newValue);
+    
   };
 
   const handleMouseUp = () => {
