@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
-import Icon from "../Icon/Icon";
-import "./ProgressBar.scss";
+import React, { useState, useRef } from 'react';
+import Icon from '../Icon/Icon';
+import './ProgressBar.scss';
 
 type Props = {
   value: number;
@@ -12,7 +12,6 @@ const ProgressBar: React.FC<Props> = ({ value, onChange }) => {
   const [dragStartX, setDragStartX] = useState(0);
   const [dragStartValue, setDragStartValue] = useState(value);
   const progressBarRef = useRef<HTMLDivElement>(null);
-  // const iconRef = useRef<HTMLDivElement>(null);
 
   const handleIconMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
@@ -63,7 +62,7 @@ const ProgressBar: React.FC<Props> = ({ value, onChange }) => {
       <div className="progress-bar-track"></div>
       <div
         className="progress-bar-fill"
-        style={{ width: `${value}%`, backgroundColor: "red" }}
+        style={{ width: `${value}%`, backgroundColor: 'red' }}
       ></div>
       <div
         className="progress-bar-icon"

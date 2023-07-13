@@ -10,17 +10,19 @@
     position: absolute;
     top: 0;
     left: 0;
-    transition: transform .1s cubic-bezier(.4,0,1,1),-webkit-transform .1s cubic-bezier(.4,0,1,1);
+    transition:
+      transform 0.1s cubic-bezier(0.4, 0, 1, 1),
+      -webkit-transform 0.1s cubic-bezier(0.4, 0, 1, 1);
   }
 
   .progress-bar-icon {
     position: absolute;
     background-color: #fff;
-    top: -6px; 
+    top: -6px;
     left: 0;
   }
 }
 
 .progress-bar:hover {
-cursor: pointer;
+  cursor: pointer;
 }

@@ -1,6 +1,6 @@
-import React, { useState, ButtonHTMLAttributes } from "react";
-import Icon from "../Icon/Icon";
-import "./PlayButton.module.scss";
+import React, { useState, ButtonHTMLAttributes } from 'react';
+import Icon from '../Icon/Icon';
+import './PlayButton.module.scss';
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement>;
 
@@ -18,7 +18,7 @@ const PlayButton: React.FC<Props> = ({ onClick, ...rest }) => {
 
   return (
     <button onClick={handleTogglePlay} {...rest}>
-      <Icon variant={isPlaying ? "play" : "pause"} />
+      <Icon variant={isPlaying ? 'play' : 'pause'} />
     </button>
   );
 };
