@@ -2,7 +2,8 @@ import React from 'react';
 import VideoPlayer from '../VideoPlayer/VideoPlayer';
 
 const Demo = () => {
-  const videoUrl = '';
+  const videoUrl =
+    'https://s3.amazonaws.com/_bc_dml/example-content/sintel_dash/sintel_vod.mpd';
 
   return (
     <div>

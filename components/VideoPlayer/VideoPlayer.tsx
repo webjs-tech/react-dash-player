@@ -30,7 +30,7 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
 
   return (
     <div>
-      <video ref={videoRef} controls={false}></video>
+      <video ref={videoRef} controls={true}></video>
     </div>
   );
 };
