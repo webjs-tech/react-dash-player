@@ -51,8 +51,10 @@ const ProgressBar: React.FC<Props> = ({ value, onChange }) => {
   };
 
   const handleProgressBarClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const newValue = calculatePinPosition(event);
-    onChange(newValue);
+    if (progressBarRef.current !== event.target) {
+      const newValue = calculatePinPosition(event);
+      onChange(newValue);
+    }
   };
 
   return (
