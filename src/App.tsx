@@ -1,20 +1,12 @@
 import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
+import Demo from '../components/Demo/Demo';
 import './App.css';
-import PlayButton from '../components/PlayButton/PlayButton';
-import ProgressBar from '../components/ProgressBar/ProgressBar';
 
 function App() {
   const [count, setCount] = useState(0);
-  const [progress, setProgress] = useState(30);
-  const handlePlayClick = () => {
-    console.log('pause/play');
-  };
-
-  const handleProgressBarChange = (newProgress: number) => {
-    setProgress(newProgress);
-  };
+  const videoUrl = '';
 
   return (
     <>
@@ -35,11 +27,10 @@ function App() {
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
+      <Demo />
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-      <PlayButton onClick={handlePlayClick} className="custom-class" />
-      <ProgressBar value={progress} onChange={handleProgressBarChange} />
     </>
   );
 }
