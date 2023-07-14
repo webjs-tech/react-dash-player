@@ -9,7 +9,11 @@ type Props = {
 
 const ProgressBar: React.FC<Props> = ({ value, onChange }) => {
   const [isDragging, setIsDragging] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const [dragStartX, setDragStartX] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const [dragStartValue, setDragStartValue] = useState(value);
   const progressBarRef = useRef<HTMLDivElement>(null);
 
@@ -23,7 +27,7 @@ const ProgressBar: React.FC<Props> = ({ value, onChange }) => {
   const calculatePinPosition = (event: React.MouseEvent<HTMLDivElement>) => {
     const progressBarRect = progressBarRef.current?.getBoundingClientRect();
     if (!progressBarRect) {
-      return;
+      return 0;
     }
     const { left, width } = progressBarRect;
 
