@@ -23,7 +23,7 @@ const ProgressBar: React.FC<Props> = ({ value, onChange }) => {
   const calculatePinPosition = (event: React.MouseEvent<HTMLDivElement>) => {
     const progressBarRect = progressBarRef.current?.getBoundingClientRect();
     if (!progressBarRect) {
-      return;
+      return 0;
     }
     const { left, width } = progressBarRect;
 
