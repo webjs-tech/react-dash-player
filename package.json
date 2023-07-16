@@ -15,7 +15,7 @@
     "classnames": "~2.3.2",
     "react": "~18.2.0",
     "react-dom": "~18.2.0",
-    "shaka-player": "~4.3.4"
+    "shaka-player": "4.3.4"
   },
   "devDependencies": {
     "@types/react": "~18.0.37",
@@ -29,7 +29,6 @@
     "patch-package": "^6.5.1",
     "prettier": "~3.0.0",
     "sass": "~1.63.6",
-    "shaka-player": "4.3.4",
     "typescript": "~5.0.2",
     "vite": "~4.3.9",
     "vite-plugin-fonts": "~0.7.0"

@@ -1,4 +1,3 @@
-import React from 'react';
 import VideoPlayer from '../VideoPlayer/VideoPlayer';
 
 const Demo = () => {
