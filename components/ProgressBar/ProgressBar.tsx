@@ -9,7 +9,11 @@ type Props = {
 
 const ProgressBar: React.FC<Props> = ({ value, onChange }) => {
   const [isDragging, setIsDragging] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const [dragStartX, setDragStartX] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const [dragStartValue, setDragStartValue] = useState(value);
   const progressBarRef = useRef<HTMLDivElement>(null);
 
