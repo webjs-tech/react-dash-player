@@ -1,0 +1,29 @@
+.videoContainer {
+  position: relative;
+}
+
+.previewСontainer {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  bottom: 0;
+  z-index: 2000;
+  margin-bottom: 3.5%;
+  align-items: center;
+}
+
+.styles.previewTime {
+  font-size: small;
+  margin-top: 2rem;
+  border-radius: 1rem;
+  padding-bottom: 1rem;
+  padding-top: 1.5rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  background-color: #333333;
+  width: min-content;
+}
+
+canvas {
+  border-radius: 0.125rem;
+}
