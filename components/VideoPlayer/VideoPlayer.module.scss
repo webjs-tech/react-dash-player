@@ -1,29 +1,37 @@
+/* VideoPlayer.module.scss */
 .videoContainer {
   position: relative;
+  width: 600px;
 }
 
 .previewСontainer {
-  display: none;
   flex-direction: column;
   position: absolute;
-  bottom: 0;
+  bottom: 100%;
+  left: 50%; /* Центруємо попап по горизонталі */
+  transform: translateX(-50%); /* Зсуваємо попап назад на половину його ширини */
   z-index: 2000;
-  margin-bottom: 3.5%;
+  margin-bottom: 8px;
   align-items: center;
+  display: none; /* Починаємо зі значення "none" */
 }
 
-.styles.previewTime {
-  font-size: small;
-  margin-top: 2rem;
-  border-radius: 1rem;
-  padding-bottom: 1rem;
-  padding-top: 1.5rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  background-color: #333333;
-  width: min-content;
-}
-
-canvas {
+.canvas {
   border-radius: 0.125rem;
+  pointer-events: none;
+}
+
+.previewTime {
+  display: flex;
+  font-size: small;
+  margin-top: 8px;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #fff;
+  white-space: nowrap;
+}
+
+.videoPlayer {
+  /* Збільште висоту контейнера, щоб видіти попап */
+  height: 300px;
 }
