@@ -46,24 +46,48 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
 
   useEffect(() => {
     const player = new shaka.Player(videoRef.current);
-
     const ui = new shaka.ui.Overlay(
       player,
       videoContainerRef.current as any,
       videoRef.current as any
     );
     const controls = ui.getControls();
-
     const controlsContainer = controls?.getControlsContainer();
+    const seekbar = controlsContainer?.querySelector('.shaka-seek-bar ');
+
+    player
+      .load(videoUrl)
+      .then(function () {
+        // This runs if the asynchronous load is successful.
+        console.log('The video has now been loaded!');
+      })
+      .catch((error) => console.error(error)); // onError is executed if the asynchronous load fails.
 
     controls?.setEnabledShakaControls(false);
-
-    const seekbar = controlsContainer?.querySelector('.shaka-seek-bar ');
 
     console.log('seekbar', seekbar);
 
     console.log('controlsContainer', controlsContainer);
   }, [videoUrl]);
+
+  const getDurationVideoMock = () => {
+    return 1;
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleMouseMove = (e: any) => {
+    const position =
+      (e.offsetX / e.target?.offsetWidth) * getDurationVideoMock();
+    const showSeekbarPreview = position * 1000;
+
+    console.log(showSeekbarPreview);
+  };
+
+  useEffect(() => {
+    const seekBar = videoRef.current?.querySelector('.shaka-seek-bar');
+    // load the thumbnail preview when the user moves over the seekbar
+    seekBar?.addEventListener('mousemove', handleMouseMove);
+  }, [handleMouseMove]);
 
   const timeFormat = (time: number) => {
     const minutes = Math.floor(time / 60);
