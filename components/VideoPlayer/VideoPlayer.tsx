@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import shaka from 'shaka-player/dist/shaka-player.ui';
+
 import 'shaka-player/dist/controls.css';
 import styles from './VideoPlayer.module.scss';
 
@@ -10,34 +11,58 @@ type Props = {
 const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const previewRef = useRef<HTMLCanvasElement>(null);
+  const videoContainerRef = useRef<HTMLDivElement>(null);
   const [hoveredTime, setHoveredTime] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const [canvasX, setCanvasX] = useState(0);
 
+  // useEffect(() => {
+  //   const initPlayer = async () => {
+  //     try {
+  //       await shaka.polyfill.installAll();
+  //       const player = new shaka.Player(videoRef.current);
+
+  //       player.configure({
+  //         controlPanelElements: [],
+  //       });
+
+  //       await player.load(videoUrl);
+
+  //       // TODO: There is no such function as `getTimeline()`
+
+  //       // Отримуємо елементи контролів
+  //       const controls = player.getControlsContainer();
+  //       if (controls) {
+  //         const timeline = controls.getTimeline();
+  //         timeline.addEventListener('mousemove', handleTimelineMouseMove);
+  //       }
+  //     } catch (error) {
+  //       console.error('error', error);
+  //     }
+  //   };
+
+  //   initPlayer();
+  // }, [videoUrl]);
+
   useEffect(() => {
-    const initPlayer = async () => {
-      try {
-        await shaka.polyfill.installAll();
-        const player = new shaka.Player(videoRef.current);
+    const player = new shaka.Player(videoRef.current);
 
-        player.configure({
-          controlPanelElements: [],
-        });
+    const ui = new shaka.ui.Overlay(
+      player,
+      videoContainerRef.current as any,
+      videoRef.current as any
+    );
+    const controls = ui.getControls();
 
-        await player.load(videoUrl);
+    const controlsContainer = controls?.getControlsContainer();
 
-        // Отримуємо елементи контролів
-        const controls = player.getControlsContainer();
-        if (controls) {
-          const timeline = controls.getTimeline();
-          timeline.addEventListener('mousemove', handleTimelineMouseMove);
-        }
-      } catch (error) {
-        console.error('error', error);
-      }
-    };
+    controls?.setEnabledShakaControls(false);
 
-    initPlayer();
+    const seekbar = controlsContainer?.querySelector('.shaka-seek-bar ');
+
+    console.log('seekbar', seekbar);
+
+    console.log('controlsContainer', controlsContainer);
   }, [videoUrl]);
 
   const timeFormat = (time: number) => {
@@ -69,7 +94,7 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
   };
 
   return (
-    <div className={styles.videoContainer}>
+    <div ref={videoContainerRef} className={styles.videoContainer}>
       <div
         className={styles.previewСontainer}
         style={{
