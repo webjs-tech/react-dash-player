@@ -25,6 +25,13 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
         });
 
         await player.load(videoUrl);
+
+        // Отримуємо елементи контролів
+        const controls = player.getControlsContainer();
+        if (controls) {
+          const timeline = controls.getTimeline();
+          timeline.addEventListener('mousemove', handleTimelineMouseMove);
+        }
       } catch (error) {
         console.error('error', error);
       }
@@ -41,22 +48,22 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
       .padStart(2, '0')}`;
   };
 
-  const handleVideoMouseMove = (event: React.MouseEvent<HTMLVideoElement>) => {
-    const videoElement = event.currentTarget;
-    const rect = videoElement.getBoundingClientRect();
-    const offsetX = event.nativeEvent.offsetX;
+  const handleTimelineMouseMove = (event: MouseEvent) => {
+    const timeline = event.currentTarget as HTMLElement;
+    const rect = timeline.getBoundingClientRect();
+    const offsetX = event.clientX - rect.left;
     const totalWidth = rect.width;
     const percentage = offsetX / totalWidth;
-    const videoDuration = videoElement.duration;
+    const videoDuration = videoRef.current?.duration || 0;
     const time = videoDuration * percentage;
     setHoveredTime(time);
     setIsHovering(true);
 
     const canvasWidth = 100;
     const canvasHeight = 50;
-    const canvasX = event.pageX - rect.left - canvasWidth / 2;
+    const canvasX = offsetX - canvasWidth / 2;
     setCanvasX(canvasX);
-    const canvasY = event.pageY - rect.top - rect.height - canvasHeight - 10;
+    const canvasY = rect.top - canvasHeight - 10;
     previewRef.current!.style.left = `${canvasX}px`;
     previewRef.current!.style.top = `${canvasY}px`;
   };
@@ -84,9 +91,6 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
         controls={true}
         style={{ width: '600px', height: 'auto' }}
         className={styles.videoPlayer}
-        onMouseMove={handleVideoMouseMove}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
       ></video>
     </div>
   );
