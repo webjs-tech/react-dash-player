@@ -8,12 +8,12 @@
   flex-direction: column;
   position: absolute;
   bottom: 100%;
-  left: 50%; /* Центруємо попап по горизонталі */
-  transform: translateX(-50%); /* Зсуваємо попап назад на половину його ширини */
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 2000;
   margin-bottom: 8px;
   align-items: center;
-  display: none; /* Починаємо зі значення "none" */
+  background-color: blue;
 }
 
 .canvas {
@@ -32,6 +32,6 @@
 }
 
 .videoPlayer {
-  /* Збільште висоту контейнера, щоб видіти попап */
+  
   height: 300px;
 }
