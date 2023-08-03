@@ -11,10 +11,12 @@ type Props = {
 const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const previewRef = useRef<HTMLCanvasElement>(null);
+  const timeLineRef = useRef<HTMLDivElement>(null);
   const [hoveredTime, setHoveredTime] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const [canvasX, setCanvasX] = useState(0);
   const [frameImage, setFrameImage] = useState<HTMLImageElement | null>(null);
+  const [cursorX, setCursorX] = useState(0);
 
   useEffect(() => {
     const initPlayer = async () => {
@@ -27,11 +29,6 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
         });
 
         await player.load(videoUrl);
-
-        const videoElement = videoRef.current;
-        if (videoElement) {
-          videoElement.addEventListener('mousemove', handleTimelineMouseMove);
-        }
       } catch (error) {
         console.error('error', error);
       }
@@ -42,11 +39,10 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
 
   useEffect(() => {
     if (frameImage) {
-      console.log(frameImage);
       const ctx = previewRef.current!.getContext('2d');
       if (ctx) {
-        const canvasWidth = 100;
-        const canvasHeight = 50;
+        const canvasWidth = 200;
+        const canvasHeight = 100;
 
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         ctx.drawImage(frameImage, 0, 0, canvasWidth, canvasHeight);
@@ -54,9 +50,35 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
         ctx.fillStyle = '#ffffff';
         ctx.font = '12px Arial';
         ctx.fillText(timeFormat(hoveredTime), 5, canvasHeight - 5);
+
+        if (frameImage && canvasX >= 0 && canvasX <= canvasWidth) {
+          const frameWidth = frameImage.width;
+          const frameHeight = frameImage.height;
+
+          const sourceX =
+            canvasX < frameWidth / 2 ? 0 : canvasX - frameWidth / 2;
+          const sourceY = 0;
+          const sourceWidth = Math.min(frameWidth, canvasWidth - canvasX);
+          const sourceHeight = frameHeight;
+
+          const destX = canvasX < frameWidth / 2 ? frameWidth / 2 - canvasX : 0;
+          const destY = 0;
+
+          ctx.drawImage(
+            frameImage,
+            sourceX,
+            sourceY,
+            sourceWidth,
+            sourceHeight,
+            destX,
+            destY,
+            sourceWidth,
+            sourceHeight
+          );
+        }
       }
     }
-  }, [frameImage, hoveredTime]);
+  }, [frameImage, hoveredTime, canvasX]);
 
   const timeFormat = (time: number) => {
     const minutes = Math.floor(time / 60);
@@ -66,38 +88,45 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
       .padStart(2, '0')}`;
   };
 
-  const handleTimelineMouseMove = async (event: MouseEvent) => {
-    const timeline = event.currentTarget as HTMLVideoElement;
-    const rect = timeline.getBoundingClientRect();
-    const offsetX = event.clientX - rect.left;
+  const handleTimelineMouseMove = async (
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
+    if (timeLineRef.current && videoRef.current) {
+      const timeLineRect = timeLineRef.current.getBoundingClientRect();
+      const offsetX = event.clientX - timeLineRect.left;
+      setCursorX(offsetX);
 
-    if (videoRef.current) {
       const videoDuration = videoRef.current.duration || 0;
-      const time = videoDuration * (offsetX / rect.width);
+      const time = videoDuration * (offsetX / timeLineRect.width);
       setHoveredTime(time);
       setIsHovering(true);
 
       const frame = await getFrame(time); // TODO: get frame
 
       if (frame) {
+        const frameImage = await loadImage(frame.url);
+        console.log(frame.url);
+        setFrameImage(frameImage);
         const canvasWidth = 100;
         const canvasX = offsetX - canvasWidth / 2;
         setCanvasX(canvasX);
-        // console.log(frame);
       }
     }
   };
 
+  const handleTimelineMouseLeave = () => {
+    setIsHovering(false);
+  };
+
+  const previewContainerStyle = {
+    display: isHovering ? 'flex' : 'none',
+    left: `${cursorX - 65}px`,
+    bottom: '30px',
+  };
+
   return (
     <div className={styles.videoContainer}>
-      <div
-        className={styles.previewСontainer}
-        style={{
-          display: isHovering ? 'flex' : 'none',
-          left: `${canvasX + 50}px`,
-          top: 130 + 'px',
-        }}
-      >
+      <div className={styles.previewСontainer} style={previewContainerStyle}>
         <canvas
           ref={previewRef}
           width={100}
@@ -106,12 +135,20 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
         />
         <span className={styles.previewTime}>{timeFormat(hoveredTime)}</span>
       </div>
-      <video
-        ref={videoRef}
-        controls={true}
-        style={{ width: '600px', height: 'auto' }}
-        className={styles.videoPlayer}
-      ></video>
+      <div className={styles.videoControls}>
+        <video
+          ref={videoRef}
+          controls={true}
+          style={{ width: '600px', height: 'auto' }}
+          className={styles.videoPlayer}
+        ></video>
+        <div
+          className={styles.timeLine}
+          ref={timeLineRef}
+          onMouseMove={handleTimelineMouseMove}
+          onMouseLeave={handleTimelineMouseLeave}
+        ></div>
+      </div>
     </div>
   );
 };

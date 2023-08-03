@@ -35,3 +35,16 @@
   
   height: 300px;
 }
+
+.videoControls {
+  position: relative;
+}
+
+.timeLine {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  width: 95%;
+  height: 10px;
+  background-color: blue;
+}
