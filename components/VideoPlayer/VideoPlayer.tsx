@@ -138,7 +138,9 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
       <div className={styles.videoControls}>
         <video
           ref={videoRef}
+          autoPlay={true}
           controls={true}
+          muted={true}
           style={{ width: '600px', height: 'auto' }}
           className={styles.videoPlayer}
         ></video>
