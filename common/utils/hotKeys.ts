@@ -46,11 +46,14 @@ export const setupHotKeys = (videoEl: HTMLVideoElement) => {
           event.preventDefault();
           break;
         case 'left':
-          videoEl.currentTime = Math.max(videoEl.currentTime - 5, 0);
+          console.log('time======' + videoEl.currentTime);
+          videoEl.currentTime = videoEl.currentTime - 5;
           event.preventDefault();
           break;
         case 'right':
+          console.log('time======' + videoEl.currentTime);
           videoEl.currentTime = videoEl.currentTime + 5;
+
           event.preventDefault();
           break;
         case '0':
@@ -94,7 +97,7 @@ export const setupHotKeys = (videoEl: HTMLVideoElement) => {
           event.preventDefault();
           break;
         case 'shift+n':
-          // navigateNext()
+          // navigateNext() - turns on the recommended next video
           event.preventDefault();
           break;
         case 'shift+,':
