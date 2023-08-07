@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import shaka from 'shaka-player/dist/shaka-player.ui';
 import 'shaka-player/dist/controls.css';
+import { setupHotKeys } from '../../common/utils/hotKeys';
 import styles from './VideoPlayer.module.scss';
 import { getFrame, loadImage } from '../../common/utils/helpers';
 
@@ -29,6 +30,7 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
         });
 
         await player.load(videoUrl);
+        setupHotKeys(videoRef.current!);
       } catch (error) {
         console.error('error', error);
       }
@@ -138,7 +140,9 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
       <div className={styles.videoControls}>
         <video
           ref={videoRef}
+          autoPlay={true}
           controls={true}
+          muted={true}
           style={{ width: '600px', height: 'auto' }}
           className={styles.videoPlayer}
         ></video>
