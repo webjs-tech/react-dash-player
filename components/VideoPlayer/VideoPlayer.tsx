@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import shaka from 'shaka-player/dist/shaka-player.ui';
 import 'shaka-player/dist/controls.css';
+import { setupHotKeys } from '../../common/utils/hotKeys';
 import styles from './VideoPlayer.module.scss';
 import { getFrame, loadImage } from '../../common/utils/helpers';
 
@@ -29,6 +30,7 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
         });
 
         await player.load(videoUrl);
+        setupHotKeys(videoRef.current);
       } catch (error) {
         console.error('error', error);
       }
@@ -39,7 +41,7 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
 
   useEffect(() => {
     if (frameImage) {
-      const ctx = previewRef.current!.getContext('2d');
+      const ctx = previewRef.current?.getContext('2d');
       if (ctx) {
         const canvasWidth = 200;
         const canvasHeight = 100;
