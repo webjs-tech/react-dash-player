@@ -25,9 +25,8 @@ export const setupHotKeys = (videoEl: HTMLVideoElement | null) => {
           event.preventDefault();
           break;
         case 'c':
-          // Show/hide subtitles
+          // TODO: Show/hide subtitles
           if (videoEl instanceof HTMLVideoElement) {
-            // TODO: Show/hide subtitles
             const firstTextTrack = videoEl.textTracks[0];
             if (firstTextTrack) {
               firstTextTrack.mode =
@@ -130,7 +129,7 @@ export const setupHotKeys = (videoEl: HTMLVideoElement | null) => {
           break;
         case 'return':
           // TODO: skips a fragment of the downloaded video
-          // func self.skipSegment()
+          // skipSegment()
           break;
         case '.':
           videoEl.currentTime += 0.04;
