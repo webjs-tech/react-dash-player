@@ -25,6 +25,7 @@ export const setupHotKeys = (videoEl: HTMLVideoElement | null) => {
           event.preventDefault();
           break;
         case 'c':
+          // Show/hide subtitles
           if (videoEl instanceof HTMLVideoElement) {
             // TODO: Show/hide subtitles
             const firstTextTrack = videoEl.textTracks[0];
