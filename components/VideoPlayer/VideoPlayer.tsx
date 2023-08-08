@@ -30,7 +30,7 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
         });
 
         await player.load(videoUrl);
-        setupHotKeys(videoRef.current!);
+        setupHotKeys(videoRef.current);
       } catch (error) {
         console.error('error', error);
       }
@@ -41,7 +41,7 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
 
   useEffect(() => {
     if (frameImage) {
-      const ctx = previewRef.current!.getContext('2d');
+      const ctx = previewRef.current?.getContext('2d');
       if (ctx) {
         const canvasWidth = 200;
         const canvasHeight = 100;

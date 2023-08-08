@@ -1,6 +1,9 @@
 import hotkeys from 'hotkeys-js';
 
-export const setupHotKeys = (videoEl: HTMLVideoElement) => {
+export const setupHotKeys = (videoEl: HTMLVideoElement | null) => {
+  if (!videoEl) {
+    return;
+  }
   hotkeys(
     'f,m,j,k,l,c,space,up,down,left,right,0,1,2,3,4,5,6,7,8,9,shift+n,shift+,,shift+.,alt+p,return,.,,',
     (event, handler) => {
@@ -23,6 +26,7 @@ export const setupHotKeys = (videoEl: HTMLVideoElement) => {
           break;
         case 'c':
           if (videoEl instanceof HTMLVideoElement) {
+            // TODO: Show/hide subtitles
             const firstTextTrack = videoEl.textTracks[0];
             if (firstTextTrack) {
               firstTextTrack.mode =
@@ -46,14 +50,11 @@ export const setupHotKeys = (videoEl: HTMLVideoElement) => {
           event.preventDefault();
           break;
         case 'left':
-          console.log('time======' + videoEl.currentTime);
           videoEl.currentTime = videoEl.currentTime - 5;
           event.preventDefault();
           break;
         case 'right':
-          console.log('time======' + videoEl.currentTime);
           videoEl.currentTime = videoEl.currentTime + 5;
-
           event.preventDefault();
           break;
         case '0':
@@ -97,7 +98,8 @@ export const setupHotKeys = (videoEl: HTMLVideoElement) => {
           event.preventDefault();
           break;
         case 'shift+n':
-          // navigateNext() - turns on the recommended next video
+          // TODO: turns on the recommended next video
+          // navigateNext()
           event.preventDefault();
           break;
         case 'shift+,':
@@ -126,7 +128,8 @@ export const setupHotKeys = (videoEl: HTMLVideoElement) => {
             : videoEl.requestPictureInPicture();
           break;
         case 'return':
-          // func self.skipSegment() - skips a fragment of the downloaded video
+          // TODO: skips a fragment of the downloaded video
+          // func self.skipSegment()
           break;
         case '.':
           videoEl.currentTime += 0.04;
