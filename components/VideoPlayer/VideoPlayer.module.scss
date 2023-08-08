@@ -42,13 +42,12 @@
 
 .timeLine {
   position: absolute;
-  bottom: 20px;
+  bottom: 15px;
   left: 15px;
   width: 95%;
   height: 4px;
   background-color: #242424;
   border-radius: 5px;
   cursor: pointer;
-  z-index: 0;
+  z-index: 1000;
 }
-

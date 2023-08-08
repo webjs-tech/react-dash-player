@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import shaka from 'shaka-player/dist/shaka-player.ui';
-import 'shaka-player/dist/controls.css';
+// import 'shaka-player/dist/controls.css';
 import { setupHotKeys } from '../../common/utils/hotKeys';
 import styles from './VideoPlayer.module.scss';
 import { getFrame, loadImage } from '../../common/utils/helpers';
@@ -11,6 +11,7 @@ type Props = {
 
 const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const videoContainerRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLCanvasElement>(null);
   const timeLineRef = useRef<HTMLDivElement>(null);
   const [hoveredTime, setHoveredTime] = useState(0);
@@ -25,8 +26,28 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
         await shaka.polyfill.installAll();
         const player = new shaka.Player(videoRef.current);
 
+        const ui = new shaka.ui.Overlay(
+          player as any,
+          videoContainerRef.current as any,
+          videoRef.current as any
+        );
+        const controls = ui.getControls();
+
+        const overflowMenuButtons = [
+          'quality',
+          'language',
+          'captions',
+          'picture_in_picture',
+          'playback_rate',
+          'airplay',
+        ];
         player.configure({
-          controlPanelElements: [],
+          overflowMenuButtons: overflowMenuButtons,
+          seekBarColors: {
+            base: 'rgba(255, 255, 255, 0.3)',
+            buffered: 'rgba(255, 255, 255, 0.54)',
+            played: 'rgb(255, 0, 0)',
+          },
         });
 
         await player.load(videoUrl);
@@ -127,7 +148,7 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
   };
 
   return (
-    <div className={styles.videoContainer}>
+    <div className={styles.videoContainer} ref={videoContainerRef}>
       <div className={styles.previewСontainer} style={previewContainerStyle}>
         <canvas
           ref={previewRef}
@@ -141,7 +162,6 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
         <video
           ref={videoRef}
           autoPlay={true}
-          controls={true}
           muted={true}
           style={{ width: '600px', height: 'auto' }}
           className={styles.videoPlayer}
