@@ -41,6 +41,9 @@
   color: #888;
 }
 
+.shaka-video-container:not([shaka-controls=true]) .shaka-controls-container {
+  display: flex; 
+}
 
 /**********origin shaka-player styles************/
 
@@ -56,6 +59,7 @@
 
 .shaka-current-time {
   font-size: 1rem;
+  
 }
 
 .shaka-video-container:-webkit-full-screen {
@@ -107,3 +111,4 @@
   font-size: 1.6em !important;
   line-height: inherit !important;
 }
+

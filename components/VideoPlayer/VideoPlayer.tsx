@@ -38,9 +38,10 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
       const player = controls?.getPlayer();
       const video = controls?.getVideo();
 
-      // controls?.setEnabledShakaControls(false);
+      controls?.setEnabledShakaControls(false);
 
       const overflowMenuButtons = [
+        'play_pause',
         'quality',
         'language',
         'captions',
@@ -50,6 +51,7 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
       ];
 
       ui.configure({
+        controls: true,
         overflowMenuButtons: overflowMenuButtons,
         seekBarColors: {
           base: 'rgba(255, 255, 255, 0.3)',
@@ -66,7 +68,7 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
   }, [videoUrl]);
 
   useEffect(() => {
-    initPlayer();
+    document.addEventListener('shaka-ui-loaded', initPlayer);
   }, [initPlayer]);
 
   useEffect(() => {
@@ -156,6 +158,16 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
     bottom: '30px',
   };
 
+  const handleVideoInteraction = () => {
+    const videoElement = videoRef.current;
+
+    if (videoElement?.paused) {
+      videoElement.play();
+    } else {
+      videoElement?.pause();
+    }
+  };
+
   return (
     <div className={styles.videoContainer} ref={videoContainerRef}>
       <div className={styles.previewСontainer} style={previewContainerStyle}>
@@ -172,15 +184,17 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
           ref={videoRef}
           autoPlay={true}
           muted={true}
-          style={{ width: '600px', height: 'auto' }}
           className={styles.videoPlayer}
+          onClick={handleVideoInteraction}
         ></video>
-        {/* <div
-          className={styles.timeLine}
-          ref={timeLineRef}
-          onMouseMove={handleTimelineMouseMove}
-          onMouseLeave={handleTimelineMouseLeave}
-        ></div> */}
+        {
+          <div
+            className={styles.timeLine}
+            ref={timeLineRef}
+            onMouseMove={handleTimelineMouseMove}
+            onMouseLeave={handleTimelineMouseLeave}
+          ></div>
+        }
       </div>
     </div>
   );
