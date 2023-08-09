@@ -38,8 +38,6 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
       const player = controls?.getPlayer();
       const video = controls?.getVideo();
 
-      controls?.setEnabledShakaControls(false);
-
       const overflowMenuButtons = [
         'play_pause',
         'quality',
@@ -158,16 +156,6 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
     bottom: '30px',
   };
 
-  const handleVideoInteraction = () => {
-    const videoElement = videoRef.current;
-
-    if (videoElement?.paused) {
-      videoElement.play();
-    } else {
-      videoElement?.pause();
-    }
-  };
-
   return (
     <div className={styles.videoContainer} ref={videoContainerRef}>
       <div className={styles.previewСontainer} style={previewContainerStyle}>
@@ -185,7 +173,6 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
           autoPlay={true}
           muted={true}
           className={styles.videoPlayer}
-          onClick={handleVideoInteraction}
         ></video>
         {
           <div
