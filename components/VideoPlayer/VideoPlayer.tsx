@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import shaka from 'shaka-player/dist/shaka-player.ui';
-// import 'shaka-player/dist/controls.css';
+
 import { setupHotKeys } from '../../common/utils/hotKeys';
-import styles from './VideoPlayer.module.scss';
 import { getFrame, loadImage } from '../../common/utils/helpers';
+import styles from './VideoPlayer.module.scss';
+
+import 'shaka-player/dist/controls.css';
 
 type Props = {
   videoUrl: string;
@@ -20,45 +22,52 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
   const [frameImage, setFrameImage] = useState<HTMLImageElement | null>(null);
   const [cursorX, setCursorX] = useState(0);
 
-  useEffect(() => {
-    const initPlayer = async () => {
-      try {
-        await shaka.polyfill.installAll();
-        const player = new shaka.Player(videoRef.current);
+  const initPlayer = useCallback(async () => {
+    try {
+      await shaka.polyfill.installAll();
+      const localPlayer = new shaka.Player(videoRef.current);
 
-        const ui = new shaka.ui.Overlay(
-          player as any,
-          videoContainerRef.current as any,
-          videoRef.current as any
-        );
-        const controls = ui.getControls();
+      const ui = new shaka.ui.Overlay(
+        localPlayer,
+        videoContainerRef.current as HTMLElement,
+        videoRef.current as HTMLMediaElement
+      );
 
-        const overflowMenuButtons = [
-          'quality',
-          'language',
-          'captions',
-          'picture_in_picture',
-          'playback_rate',
-          'airplay',
-        ];
-        player.configure({
-          overflowMenuButtons: overflowMenuButtons,
-          seekBarColors: {
-            base: 'rgba(255, 255, 255, 0.3)',
-            buffered: 'rgba(255, 255, 255, 0.54)',
-            played: 'rgb(255, 0, 0)',
-          },
-        });
+      const controls = ui.getControls();
 
-        await player.load(videoUrl);
-        setupHotKeys(videoRef.current);
-      } catch (error) {
-        console.error('error', error);
-      }
-    };
+      const player = controls?.getPlayer();
+      const video = controls?.getVideo();
 
-    initPlayer();
+      // controls?.setEnabledShakaControls(false);
+
+      const overflowMenuButtons = [
+        'quality',
+        'language',
+        'captions',
+        'picture_in_picture',
+        'playback_rate',
+        'airplay',
+      ];
+
+      ui.configure({
+        overflowMenuButtons: overflowMenuButtons,
+        seekBarColors: {
+          base: 'rgba(255, 255, 255, 0.3)',
+          buffered: 'rgba(255, 255, 255, 0.54)',
+          played: 'rgb(255, 0, 0)',
+        },
+      });
+
+      await player?.load(videoUrl);
+      setupHotKeys(videoRef.current);
+    } catch (error) {
+      console.error('error', error);
+    }
   }, [videoUrl]);
+
+  useEffect(() => {
+    initPlayer();
+  }, [initPlayer]);
 
   useEffect(() => {
     if (frameImage) {
@@ -166,12 +175,12 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
           style={{ width: '600px', height: 'auto' }}
           className={styles.videoPlayer}
         ></video>
-        <div
+        {/* <div
           className={styles.timeLine}
           ref={timeLineRef}
           onMouseMove={handleTimelineMouseMove}
           onMouseLeave={handleTimelineMouseLeave}
-        ></div>
+        ></div> */}
       </div>
     </div>
   );
