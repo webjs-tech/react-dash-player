@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import shaka from 'shaka-player/dist/shaka-player.ui';
-import 'shaka-player/dist/controls.css';
+
 import { setupHotKeys } from '../../common/utils/hotKeys';
-import styles from './VideoPlayer.module.scss';
 import { getFrame, loadImage } from '../../common/utils/helpers';
+import styles from './VideoPlayer.module.scss';
+
+import 'shaka-player/dist/controls.css';
 
 type Props = {
   videoUrl: string;
@@ -11,6 +13,7 @@ type Props = {
 
 const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const videoContainerRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLCanvasElement>(null);
   const timeLineRef = useRef<HTMLDivElement>(null);
   const [hoveredTime, setHoveredTime] = useState(0);
@@ -19,25 +22,52 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
   const [frameImage, setFrameImage] = useState<HTMLImageElement | null>(null);
   const [cursorX, setCursorX] = useState(0);
 
-  useEffect(() => {
-    const initPlayer = async () => {
-      try {
-        await shaka.polyfill.installAll();
-        const player = new shaka.Player(videoRef.current);
+  const initPlayer = useCallback(async () => {
+    try {
+      await shaka.polyfill.installAll();
+      const localPlayer = new shaka.Player(videoRef.current);
 
-        player.configure({
-          controlPanelElements: [],
-        });
+      const ui = new shaka.ui.Overlay(
+        localPlayer,
+        videoContainerRef.current as HTMLElement,
+        videoRef.current as HTMLMediaElement
+      );
 
-        await player.load(videoUrl);
-        setupHotKeys(videoRef.current);
-      } catch (error) {
-        console.error('error', error);
-      }
-    };
+      const controls = ui.getControls();
 
-    initPlayer();
+      const player = controls?.getPlayer();
+      const video = controls?.getVideo();
+
+      const overflowMenuButtons = [
+        'play_pause',
+        'quality',
+        'language',
+        'captions',
+        'picture_in_picture',
+        'playback_rate',
+        'airplay',
+      ];
+
+      ui.configure({
+        controls: true,
+        overflowMenuButtons: overflowMenuButtons,
+        seekBarColors: {
+          base: 'rgba(255, 255, 255, 0.3)',
+          buffered: 'rgba(255, 255, 255, 0.54)',
+          played: 'rgb(255, 0, 0)',
+        },
+      });
+
+      await player?.load(videoUrl);
+      setupHotKeys(videoRef.current);
+    } catch (error) {
+      console.error('error', error);
+    }
   }, [videoUrl]);
+
+  useEffect(() => {
+    document.addEventListener('shaka-ui-loaded', initPlayer);
+  }, [initPlayer]);
 
   useEffect(() => {
     if (frameImage) {
@@ -127,7 +157,7 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
   };
 
   return (
-    <div className={styles.videoContainer}>
+    <div className={styles.videoContainer} ref={videoContainerRef}>
       <div className={styles.previewСontainer} style={previewContainerStyle}>
         <canvas
           ref={previewRef}
@@ -141,17 +171,17 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl }) => {
         <video
           ref={videoRef}
           autoPlay={true}
-          controls={true}
           muted={true}
-          style={{ width: '600px', height: 'auto' }}
           className={styles.videoPlayer}
         ></video>
-        <div
-          className={styles.timeLine}
-          ref={timeLineRef}
-          onMouseMove={handleTimelineMouseMove}
-          onMouseLeave={handleTimelineMouseLeave}
-        ></div>
+        {
+          <div
+            className={styles.timeLine}
+            ref={timeLineRef}
+            onMouseMove={handleTimelineMouseMove}
+            onMouseLeave={handleTimelineMouseLeave}
+          ></div>
+        }
       </div>
     </div>
   );
