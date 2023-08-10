@@ -41,6 +41,7 @@
   color: #888;
 }
 
+/* TODO: It's hack, to prevent controls duplication. Should take a look deeper into this issue
 .shaka-video-container:not([shaka-controls=true]) .shaka-controls-container {
   display: flex; 
 }
